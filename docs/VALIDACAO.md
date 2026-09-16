@@ -20,6 +20,15 @@ Validação local realizada em **16/09/2026**, em Windows, JDK 25, Maven 3.9.11,
 
 Total: **59 verificações automatizadas aprovadas** entre backend, CML e E2E. O número se refere a casos executados, não a uma promessa de ausência de defeitos.
 
+## Validação no GitHub Actions
+
+O [workflow 35101178309](https://github.com/GuitGud/maos-em-acao/actions/runs/35101178309), executado sobre o commit de implementação `28b8e9c`, terminou com **sucesso nos dois jobs** em 16/09/2026:
+
+- `test`: Angular, 53 testes Java/Cucumber, validador CML, cinco testes Playwright/Chromium e publicação dos relatórios.
+- `postgres`: os 21 testes de aplicação/API e 19 cenários Cucumber passaram também com **PostgreSQL 17 real** no serviço do runner Linux, em Java 21.
+
+As 40 execuções no PostgreSQL repetem casos já contabilizados; não são 40 funcionalidades adicionais. A configuração completa do Docker Compose não foi executada localmente.
+
 ## Cobertura Java (JaCoCo)
 
 Na execução de `verify`:
@@ -58,7 +67,7 @@ Todas as suítes afetadas foram executadas novamente após suas respectivas corr
 
 ## Ambientes e limites
 
-H2 em arquivo está configurado para uso normal; os testes locais automatizados e o servidor E2E usaram H2 em memória, com migrações reais. O Docker não estava disponível na máquina para execução local. PostgreSQL 17 tem configuração de Compose e um job dedicado no GitHub Actions para executar os testes de aplicação e Cucumber; o status remoto do workflow é a fonte de evidência desse ambiente.
+H2 em arquivo está configurado para uso normal; os testes locais automatizados e o servidor E2E usaram H2 em memória, com migrações reais. O Docker não estava disponível na máquina para execução local. PostgreSQL 17 foi validado pelo job dedicado do GitHub Actions, conforme a execução bem-sucedida vinculada acima.
 
 Não foram feitos testes de carga, pentest, certificação formal de acessibilidade ou operação em produção. A galeria contém capturas do estado demo anterior à execução E2E; os testes criam registros extras em seu banco isolado.
 

@@ -44,6 +44,12 @@ Usuário: “1 integrante”.
 
 ## Evidências técnicas
 
+Assistente, após validação local: “Os cinco testes de navegador passaram. A validação local soma 53 testes Java/Cucumber, 1 validação CML e 5 testes E2E aprovados. O repositório público foi criado; vou enviar o projeto e conferir a execução da integração contínua no GitHub.”
+
+Assistente, após publicação: “O projeto já está publicado em GuitGud/maos-em-acao. No GitHub Actions, passaram a compilação, os testes Java, o CML e os testes com PostgreSQL 17. Falta apenas concluir a etapa de navegador no ambiente Linux.”
+
+Resultado posterior: ambos os jobs da CI concluíram com sucesso, incluindo Playwright no Linux. A execução está vinculada em `../VALIDACAO.md`.
+
 As implementações e correções são verificáveis no código versionado. Os resultados finais dos testes e a descrição dos ambientes estão em `../VALIDACAO.md`. Logs regeneráveis, binários de dependências, dados locais, cookies e credenciais não fazem parte do repositório público.
 
 Este registro acompanha a entrega acadêmica, mas não pretende reproduzir cada comando de ferramenta. Caso seja exigido arquivo original da conversa, a tarefa no aplicativo é a fonte para exportação.

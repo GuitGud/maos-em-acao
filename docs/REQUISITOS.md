@@ -12,7 +12,7 @@ Referência: enunciado **Trabalho em grupo.pdf**, disponibilizado pelo solicitan
 | Funcionalidades completas, não apenas leitura | Comandos com validação, persistência, interface e testes | Implementado |
 | 4 a 6 integrantes | Usuário informou **1 integrante** | **Divergência que exige autorização do professor** |
 | Carga por integrante | Opção: 2 altas, ou 1 média + 2 baixas, ou 4 baixas | Escopo excede 2 candidatas a alta; classificação sujeita ao professor |
-| Repositório público ou acesso docente | Publicação pública solicitada em `GuitGud/maos-em-acao` | Conferir link e status da publicação no README |
+| Repositório público ou acesso docente | [GuitGud/maos-em-acao](https://github.com/GuitGud/maos-em-acao) | Publicado; CI aprovada |
 | Descrição de domínio e linguagem onipresente | `DOMINIO_E_DDD.md` | Entregue |
 | Mapa da história do usuário | `MAPA_DE_HISTORIAS.md` | Entregue |
 | Protótipos de alta fidelidade | Interface executável, imagens e galeria em `prototipos/` | Entregue |
