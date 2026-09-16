@@ -1,0 +1,14 @@
+target/
+node_modules/
+.pnpm-store/
+frontend/dist/
+frontend/.angular/
+.tools/
+data/
+.env
+*.log
+tmp/
+playwright-report/
+test-results/
+.idea/
+.vscode/

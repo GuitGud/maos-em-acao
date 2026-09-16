@@ -1,0 +1,71 @@
+name: Qualidade
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --global pnpm@11.19.0
+      - run: pnpm install --frozen-lockfile && pnpm build
+        working-directory: frontend
+      - run: chmod +x mvnw && ./mvnw -B verify
+      - run: ./mvnw -B -f tools/cml-validation/pom.xml test
+      - run: pnpm exec playwright install --with-deps chromium
+        working-directory: frontend
+      - name: Iniciar aplicação de demonstração para E2E
+        run: |
+          DEMO_MODE=true DB_URL='jdbc:h2:mem:e2e;MODE=PostgreSQL;DB_CLOSE_DELAY=-1' java -jar target/maos-em-acao-1.0.0.jar > /tmp/maos-app.log 2>&1 &
+          for i in $(seq 1 60); do curl -fsS http://127.0.0.1:8080/api/csrf && exit 0; sleep 2; done
+          cat /tmp/maos-app.log
+          exit 1
+      - run: pnpm test
+        working-directory: frontend
+        env:
+          PLAYWRIGHT_CHANNEL: chromium
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidencias-de-testes
+          path: |
+            target/surefire-reports
+            target/cucumber.html
+            target/site/jacoco
+            frontend/playwright-report
+  postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: maos_test
+          POSTGRES_USER: maos_test
+          POSTGRES_PASSWORD: ci_test_only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U maos_test -d maos_test"
+          --health-interval 5s --health-timeout 5s --health-retries 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Casos de uso, API e Cucumber no PostgreSQL
+        run: >-
+          chmod +x mvnw && ./mvnw -B test
+          '-Dtest=ApplicationTest,RunCucumberTest'
+          '-Dspring.datasource.url=jdbc:postgresql://localhost:5432/maos_test'
+          '-Dspring.datasource.username=maos_test'
+          '-Dspring.datasource.password=ci_test_only'

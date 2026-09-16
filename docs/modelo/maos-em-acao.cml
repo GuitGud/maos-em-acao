@@ -1,0 +1,150 @@
+/* Contextos lógicos de um monólito. Referências entre agregados usam identificadores. */
+ContextMap MaosEmAcao {
+  type = SYSTEM_LANDSCAPE
+  state = AS_IS
+  contains Campanhas, Voluntariado, Estoque, Distribuicao, Comunicacao
+  Campanhas [U]->[D] Voluntariado
+  Campanhas [U]->[D] Estoque
+  Campanhas [U]->[D] Distribuicao
+  Voluntariado [U]->[D] Distribuicao
+  Estoque [U]->[D] Distribuicao
+  Campanhas [U]->[D] Comunicacao
+  Voluntariado [U]->[D] Comunicacao
+}
+
+BoundedContext Campanhas {
+  domainVisionStatement = "Organizar campanhas e necessidades de ajuda comunitaria."
+  Aggregate GestaoCampanha {
+    Entity Campanha {
+      aggregateRoot
+      Long id
+      String nome
+      String descricao
+      String situacao
+      - List<Necessidade> necessidades
+      def void publicar(boolean possuiNecessidades);
+      def void encerrar(boolean possuiTurnosAbertos);
+    }
+    Entity Necessidade {
+      Long id
+      Long itemId
+      int meta
+    }
+  }
+}
+
+BoundedContext Voluntariado {
+  domainVisionStatement = "Conectar pessoas aprovadas a turnos, confirmar presencas e reconhecer participacao."
+  Aggregate Pessoas {
+    Entity Voluntario {
+      aggregateRoot
+      Long id
+      String nome
+      String enderecoEmail
+      boolean aprovado
+      String papel
+    }
+  }
+  Aggregate Agenda {
+    Entity Turno {
+      aggregateRoot
+      Long id
+      Long campanhaId
+      String titulo
+      Date inicio
+      Date fim
+      int capacidade
+      String situacao
+      - List<Inscricao> inscricoes
+      def void verificarVaga(int ocupacao);
+    }
+    Entity Inscricao {
+      Long id
+      Long voluntarioId
+      String situacao
+      double horas
+    }
+  }
+  Aggregate Avaliacoes {
+    Entity Avaliacao {
+      aggregateRoot
+      Long id
+      Long inscricaoId
+      int nota
+      String comentario
+    }
+  }
+}
+
+BoundedContext Estoque {
+  domainVisionStatement = "Preservar o saldo de itens e a rastreabilidade de toda movimentacao."
+  Aggregate Inventario {
+    Entity Item {
+      aggregateRoot
+      Long id
+      String nome
+      String unidade
+      int saldo
+      - List<Movimentacao> movimentacoes
+      def void movimentar(int quantidade);
+    }
+    Entity Movimentacao {
+      Long id
+      Long campanhaId
+      int quantidade
+      String tipo
+      String motivo
+      Date registradaEm
+      Long autorId
+    }
+  }
+}
+
+BoundedContext Distribuicao {
+  domainVisionStatement = "Registrar entregas e estornos sem perder a trilha de responsabilidade."
+  Aggregate Entregas {
+    Entity Entrega {
+      aggregateRoot
+      Long id
+      Long campanhaId
+      Long itemId
+      int quantidade
+      String beneficiario
+      int vulnerabilidade
+      int membros
+      int prioridade
+      String situacao
+      Date registradaEm
+      Long autorId
+      String motivo
+    }
+  }
+  Aggregate PrestacaoContas {
+    Entity Relatorio {
+      aggregateRoot
+      Long id
+      String titulo
+      String conteudo
+      Date geradoEm
+      Long autorId
+    }
+  }
+}
+
+BoundedContext Comunicacao {
+  domainVisionStatement = "Avisar cada participante sobre mudancas relevantes e registrar a leitura."
+  Aggregate CaixaEntrada {
+    Entity Notificacao {
+      aggregateRoot
+      Long id
+      Long voluntarioId
+      String mensagem
+      boolean lida
+      Date criadaEm
+    }
+    DomainEvent Alteracao {
+      List<Long> destinatarios
+      String mensagem
+    }
+  }
+}

@@ -1,0 +1,11 @@
+.git
+.tools
+.pnpm-store
+target
+data
+.env
+frontend/node_modules
+frontend/dist
+frontend/.angular
+frontend/playwright-report
+frontend/test-results
