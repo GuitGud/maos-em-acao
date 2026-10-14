@@ -10,6 +10,8 @@ O pedido original está transcrito em [interacoes/pedido-original.md](interacoes
 
 1. À pergunta sobre visibilidade/nome: **“Público, com nome maos-em-acao”**.
 2. À pergunta sobre tamanho do grupo: **“1 integrante”**.
+3. Solicitação de preparação da apresentação do mapa de histórias de usuário e dos protótipos de alta fidelidade.
+4. À pergunta sobre a duração da apresentação: **“Cerca de 10 minutos”**.
 
 Essas respostas orientaram a publicação pública e a ausência de divisão nominal fictícia.
 
@@ -28,6 +30,7 @@ Este registro é um resumo de trabalho, **não uma exportação literal de toda 
 | Correções | Conflito de nome de bean Spring; palavra reservada no CML; nomes acessíveis dos botões de navegação |
 | Documentação | Requisitos, mapa de histórias, DDD, arquitetura, contrato, protótipos e comandos |
 | Publicação | Preparação de repositório público autorizado pelo usuário, sem publicar credenciais locais |
+| Apresentação | Preparação de slides com mapa editável, capturas reais da aplicação, notas de fala, roteiro de aproximadamente 10 minutos e PDF de reserva |
 
 As evidências de execução estão em [VALIDACAO.md](VALIDACAO.md) e nos relatórios produzidos pelos comandos documentados. A autoria de commits não implica que cada linha foi escrita manualmente pelo integrante; esta declaração acompanha o código.
 

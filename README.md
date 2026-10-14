@@ -12,6 +12,7 @@ Plataforma web para organizar campanhas solidárias, doações, turnos de volunt
 - [Requisitos e rastreabilidade](docs/REQUISITOS.md).
 - [Domínio, linguagem ubíqua e DDD](docs/DOMINIO_E_DDD.md).
 - [Mapa de histórias de usuário](docs/MAPA_DE_HISTORIAS.md).
+- [Apresentação de 10 minutos: mapa, protótipos e roteiro de fala](docs/apresentacao/README.md).
 - [Arquitetura, padrões e modelo relacional](docs/ARQUITETURA.md).
 - [Modelo Context Mapper](docs/modelo/maos-em-acao.cml).
 - [Protótipos de alta fidelidade](docs/prototipos/README.md).
