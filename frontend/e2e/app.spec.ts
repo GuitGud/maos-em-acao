@@ -32,3 +32,59 @@ test('layout móvel não transborda horizontalmente',async({page})=>{
 test('conteúdo HTML cadastrado é exibido como texto, sem execução',async({page})=>{
   await login(page);await page.getByRole('button',{name:'Campanhas',exact:true}).click();await page.getByRole('button',{name:'+ Nova campanha'}).click();const text='<img src=x onerror=alert(1)> '+Date.now();await page.getByLabel('Nome da campanha').fill(text);await page.getByLabel('Propósito e descrição').fill('Validação de escape');await page.getByRole('dialog').getByRole('button',{name:'Salvar',exact:true}).click();await expect(page.getByRole('heading',{name:text})).toBeVisible();await expect(page.locator('article.campaign img')).toHaveCount(0);
 });
+
+test('relatório, download e painel separam unidades e excluem entregas estornadas',async({page})=>{
+  await login(page);
+  const token=await (await page.request.get('/api/csrf')).json();
+  async function post(path:string,data:unknown={}) {
+    const response=await page.request.post('/api'+path,{data,headers:{[token.headerName]:token.token}});
+    expect(response.ok()).toBeTruthy();
+    return response.json();
+  }
+  const suffix=Date.now();
+  const campaign=await post('/campaigns',{name:'Unidades E2E '+suffix,description:'Regressão dos totais por unidade'});
+  const first=await post('/items',{name:'Alimentos A '+suffix,unit:'caixa'});
+  const second=await post('/items',{name:'Alimentos B '+suffix,unit:'caixa'});
+  const kit=await post('/items',{name:'Higiene '+suffix,unit:'pacote'});
+  await post('/campaigns/'+campaign.id+'/needs',{itemId:first.id,target:300});
+  await post('/campaigns/'+campaign.id+'/publish');
+  for(const [item,quantity] of [[first,120],[second,100],[kit,2]] as const)
+    await post('/movements',{campaignId:campaign.id,itemId:item.id,quantity,kind:'DOACAO',reason:'Teste de unidades'});
+  await post('/deliveries',{campaignId:campaign.id,itemId:first.id,quantity:3,beneficiary:'F-CAIXAS',vulnerability:2,members:2,strategy:'VULNERABILIDADE'});
+  const delivery=await post('/deliveries',{campaignId:campaign.id,itemId:kit.id,quantity:1,beneficiary:'F-PACOTES',vulnerability:2,members:2,strategy:'VULNERABILIDADE'});
+  await post('/deliveries/'+delivery.id+'/reverse',{reason:'Devolução de teste'});
+  await page.reload();
+  const stock=page.getByRole('article',{name:'Estoque por unidade'});
+  const delivered=page.getByRole('article',{name:'Participação e entregas'});
+  await expect(stock.locator('strong').filter({hasText:'caixa'})).toHaveText('217 caixa');
+  await expect(stock.locator('strong').filter({hasText:'pacote'})).toHaveText('2 pacote');
+  await expect(delivered.locator('strong').filter({hasText:'caixa'})).toHaveText('3 caixa');
+  await expect(delivered.locator('strong').filter({hasText:'pacote'})).toHaveText('0 pacote');
+  await page.setViewportSize({width:390,height:844});
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBeTruthy();
+  await page.screenshot({path:'test-results/totais-por-unidade-mobile.png',fullPage:true});
+  await page.setViewportSize({width:1440,height:1000});
+  await page.getByRole('button',{name:'Relatórios',exact:true}).click();
+  await page.getByRole('button',{name:'+ Salvar relatório'}).click();
+  const title='Balanço por unidade '+suffix;
+  await page.getByLabel('Título do relatório').fill(title);
+  await page.getByRole('dialog').getByRole('button',{name:'Salvar',exact:true}).click();
+  const card=page.locator('article.report').filter({hasText:title});
+  const content=card.locator('pre');
+  await expect(content).toContainText(/Doações recebidas: 220 caixa;[^\n]*2 pacote/);
+  await expect(content).toContainText(/Estoque atual: 217 caixa;[^\n]*2 pacote/);
+  await expect(content).toContainText(/Itens entregues: 3 caixa;[^\n]*0 pacote/);
+  const saved=await content.innerText();
+  const downloadPromise=page.waitForEvent('download');
+  await card.getByRole('button',{name:'Baixar relatório ↓'}).click();
+  const download=await downloadPromise;
+  const stream=await download.createReadStream();
+  const chunks:Buffer[]=[];
+  for await(const chunk of stream) chunks.push(chunk);
+  expect(Buffer.concat(chunks).toString('utf8')).toContain(saved);
+  await post('/movements',{campaignId:campaign.id,itemId:kit.id,quantity:5,kind:'DOACAO',reason:'Depois do snapshot'});
+  await page.reload();
+  await page.getByRole('button',{name:'Relatórios',exact:true}).click();
+  await expect(content).toHaveText(saved);
+  await page.screenshot({path:'test-results/relatorio-por-unidade.png',fullPage:true});
+});

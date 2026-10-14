@@ -1,12 +1,12 @@
 # Auditoria dos requisitos iniciais
 
-Data: **14/10/2026**. Base examinada: commit `2e10d77`, comparado diretamente com as seis páginas de **Trabalho em grupo.pdf** fornecido pelo responsável, com o pedido inicial e com a documentação do projeto. As alterações desta auditoria são documentais e de versionamento; o código funcional não foi alterado.
+Data: **14/10/2026**. Base da auditoria inicial: commit `2e10d77`, comparado diretamente com as seis páginas de **Trabalho em grupo.pdf** fornecido pelo responsável, com o pedido inicial e com a documentação do projeto. A primeira auditoria foi documental; posteriormente, a pedido do responsável, o defeito dos relatórios foi corrigido conforme atualização abaixo.
 
 ## Conclusão
 
-**Não é possível declarar conformidade integral.** Os artefatos técnicos exigidos estão presentes, a aplicação compila e as 59 verificações automatizadas passaram novamente. Permanecem duas pendências acadêmicas: a equipe tem um integrante e o registro completo das interações com IA ainda precisa ser entregue ao professor. A classificação de complexidade também depende da avaliação docente.
+**Não é possível declarar conformidade integral.** Os artefatos técnicos exigidos estão presentes, a aplicação compila e as 59 verificações da auditoria inicial passaram. Na correção posterior passaram 56 testes Java/Cucumber e 6 testes de navegador. Permanecem duas pendências acadêmicas: a equipe tem um integrante e o registro completo das interações com IA ainda precisa ser entregue ao professor. A classificação de complexidade também depende da avaliação docente.
 
-Foi identificado e reproduzido um defeito funcional nos totais dos relatórios: somam quantidades de unidades diferentes. A existência de testes aprovados não elimina esse achado. A correção do cálculo não faz parte das alterações realizadas nesta auditoria.
+Foi identificado e reproduzido um defeito funcional nos totais dos relatórios: somavam quantidades de unidades diferentes. **Esse achado foi corrigido após a auditoria inicial**, com regressões específicas para relatórios, indicadores, download e snapshots. O registro original foi preservado abaixo para explicar a mudança.
 
 ## Comparação com o PDF original
 
@@ -17,7 +17,7 @@ Foi identificado e reproduzido um defeito funcional nos totais dos relatórios: 
 | Sistema web (p. 1) | Atendido | Angular em `frontend/src`, API Spring MVC e JAR com interface; build e testes de navegador aprovados. |
 | Banco relacional (p. 1) | Atendido | Migração Flyway com 11 tabelas, PKs, FKs e constraints; H2 executado nesta auditoria. PostgreSQL possui evidência anterior na CI. |
 | Carga por integrante: 2 altas, ou 1 média + 2 baixas, ou 4 baixas (pp. 1–2) | Condicionado à avaliação docente | Campanhas, estoque, turnos e distribuição são quatro fluxos candidatos a alta complexidade. Justificativas em [REQUISITOS.md](REQUISITOS.md). Isso não substitui aprovação da classificação nem o tamanho mínimo do grupo. |
-| Funcionalidades completas, com escrita (p. 2) | Atendido nos fluxos centrais; ressalva nos relatórios | Casos de uso, persistência, interface e testes para campanhas, estoque, turnos e entregas. Relatórios têm escrita real, mas o total de unidades heterogêneas precisa de correção. |
+| Funcionalidades completas, com escrita (p. 2) | Atendido nos fluxos verificados | Casos de uso, persistência, interface e testes para campanhas, estoque, turnos e entregas. A soma de unidades heterogêneas nos novos relatórios foi corrigida e recebeu testes de regressão. |
 | Grupo de 4 a 6 integrantes (p. 2) | **Não atendido literalmente** | O responsável informou um integrante. É necessário obter autorização explícita para trabalho individual ou constituir equipe com contribuições reais. |
 | Publicação dos artefatos no GitHub, público ou acessível ao professor (pp. 2–3) | Público confirmado; ressalva documental | API do GitHub confirmou `private=false`. Código, documentação, CML, protótipos e apresentação estão versionados. O registro de interações solicitado para remoção fica somente local; sua entrega por outro meio deve ser acordada com o professor. |
 | Java (p. 3) | Atendido | Código e build Java com target 21; execução local no JDK 25. |
@@ -64,7 +64,7 @@ Os comandos reproduzíveis estão em [FUNCIONALIDADES_E_TESTES.md](../FUNCIONALI
 
 O [workflow anterior 35101178309](https://github.com/GuitGud/maos-em-acao/actions/runs/35101178309) foi consultado novamente: está concluído com sucesso no commit `28b8e9c`. A evidência anterior inclui PostgreSQL 17. PostgreSQL e Docker Compose **não foram reexecutados** nesta auditoria local; o resultado anterior não é apresentado como uma nova execução.
 
-## Achado funcional: quantidades com unidades diferentes
+## Achado funcional original: quantidades com unidades diferentes
 
 **Prioridade média — relatório e indicadores consolidados.** `Reports.Summary` soma quantidades de todos os itens sem agrupar a unidade cadastrada. `totalStock` e `totalDelivered`, em `frontend/src/main.ts`, fazem a mesma agregação.
 
@@ -76,7 +76,15 @@ Caso reproduzido por HTTP no banco temporário, após os testes de navegador:
 
 Esse total perde o significado físico das quantidades. O resultado deveria discriminar item/unidade, como **220 kg e 2 kits**, ou usar outro indicador explicitamente definido. Saldo por item e movimentações individuais continuam preservados; o problema está na consolidação.
 
-Recomendação para correção: agrupar os valores por item/unidade no relatório e nos indicadores, definir o que ocorre com snapshots antigos e incluir teste com unidades heterogêneas. A suíte atual verifica salvar/persistir relatórios e autorizações, mas não detecta esse caso.
+Na auditoria inicial foi recomendado agrupar por unidade e testar quantidades heterogêneas. A suíte daquela versão verificava salvar/persistir relatórios e autorizações, mas não detectava esse caso.
+
+### Resolução em 14/10/2026
+
+`Reports.Summary` agora agrupa separadamente doações, saldo e entregas pela unidade cadastrada. O Iterator continua participando do cálculo de entregas, que exclui estornos; ajustes afetam o saldo, sem inflar doações. Os indicadores do Angular exibem uma linha por unidade. Não há conversão implícita entre `kg` e `g` nem unificação de grafias distintas.
+
+Foram adicionados três testes de integração para múltiplos itens/unidades, ajustes, estorno, snapshots imutáveis, catálogo vazio e soma acima do limite de um inteiro. Um novo teste Playwright cobre painel desktop/móvel, relatório salvo, conteúdo do download TXT e preservação do snapshot após outra doação. Os resultados estão em [VALIDACAO.md](VALIDACAO.md).
+
+Relatórios já salvos mantêm o texto histórico. Para obter os totais corrigidos do estado atual, gere um novo relatório. Não foi realizada reescrita dos snapshots anteriores nem reconstrução de estados passados.
 
 ## Remoção solicitada do registro
 
@@ -89,6 +97,7 @@ Essa remoção afeta a versão atual após o push; **o arquivo continua acessív
 1. Resolver com o professor a divergência entre um integrante e o grupo mínimo de quatro.
 2. Entregar as interações com IA por meio aceito pelo professor e confirmar como isso se concilia com a exigência de publicar os artefatos.
 3. Confirmar a classificação de complexidade dos fluxos escolhidos para avaliação.
-4. Corrigir a consolidação de unidades diferentes antes de apresentar os totais como medida de estoque/doações.
+
+O item técnico sobre consolidação de unidades foi resolvido. As três pendências acima são acadêmicas e não foram alteradas pela correção.
 
 Não foram executados pentest, teste de carga ou certificação de acessibilidade; tais verificações não são exigências expressas do PDF fornecido. Esta auditoria distingue atendimento documental, testes executados, achados funcionais e decisões que só o professor pode validar.

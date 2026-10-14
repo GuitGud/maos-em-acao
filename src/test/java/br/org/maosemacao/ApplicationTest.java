@@ -96,6 +96,36 @@ class ApplicationTest {
         assertThatThrownBy(()->actions.deliver(vol,campaign.id(),item.id(),1,"F1",2,2,"VULNERABILIDADE")).hasMessageContaining("participar");
         actions.enroll(vol,shift.id());assertThat(actions.deliver(vol,campaign.id(),item.id(),1,"F1",2,2,"VULNERABILIDADE").status()).isEqualTo("ENTREGUE");
     }
+    @Test void reportsSeparateUnitsAndPreserveSnapshotsAfterReversalAndAdjustment() {
+        var beans=actions.createItem(admin,"Feijão","kg");
+        var kit=actions.createItem(admin,"Higiene","kit");
+        var grams=actions.createItem(admin,"Tempero","g");
+        actions.movement(admin,campaign.id(),item.id(),120,"DOACAO","Arroz");
+        actions.movement(admin,campaign.id(),beans.id(),100,"DOACAO","Feijão");
+        actions.movement(admin,campaign.id(),kit.id(),2,"DOACAO","Kits");
+        actions.movement(admin,campaign.id(),grams.id(),500,"DOACAO","Tempero");
+        actions.movement(admin,campaign.id(),item.id(),-5,"AJUSTE","Contagem física");
+        actions.deliver(admin,campaign.id(),beans.id(),10,"F1",2,2,"VULNERABILIDADE");
+        var reversed=actions.deliver(admin,campaign.id(),kit.id(),1,"F2",2,2,"VULNERABILIDADE");
+        actions.reverse(admin,reversed.id(),"Devolução");
+        var saved=actions.report(admin,"Unidades distintas");
+        assertThat(saved.content()).isEqualTo("Doações recebidas: 500 g; 220 kg; 2 kit\nEstoque atual: 500 g; 205 kg; 2 kit\nItens entregues: 0 g; 10 kg; 0 kit\nHoras voluntárias: 0.0");
+        actions.movement(admin,campaign.id(),kit.id(),3,"DOACAO","Nova doação");
+        assertThat(store.get(Report.class,saved.id()).content()).isEqualTo(saved.content());
+        assertThat(actions.report(admin,"Novo retrato").content()).contains("Estoque atual: 500 g; 205 kg; 5 kit");
+    }
+    @Test void reportsHandleZeroStockAndEmptyCatalog() {
+        assertThat(actions.report(admin,"Sem movimentos").content()).isEqualTo("Doações recebidas: 0 kg\nEstoque atual: 0 kg\nItens entregues: 0 kg\nHoras voluntárias: 0.0");
+        for(var need:store.all(Need.class)) store.delete(Need.class,need.id());
+        store.delete(Item.class,item.id());
+        assertThat(actions.report(admin,"Sem catálogo").content()).isEqualTo("Doações recebidas: Nenhum item cadastrado\nEstoque atual: Nenhum item cadastrado\nItens entregues: Nenhum item cadastrado\nHoras voluntárias: 0.0");
+    }
+    @Test void reportTotalsUseLongAcrossItemsWithTheSameUnit() {
+        var beans=actions.createItem(admin,"Feijão","kg");
+        actions.movement(admin,campaign.id(),item.id(),Integer.MAX_VALUE,"DOACAO","Arroz");
+        actions.movement(admin,campaign.id(),beans.id(),Integer.MAX_VALUE,"DOACAO","Feijão");
+        assertThat(actions.report(admin,"Total grande").content()).contains("Doações recebidas: 4294967294 kg\nEstoque atual: 4294967294 kg");
+    }
     @Test void reportAccessAndDeletion() {
         assertThatThrownBy(()->actions.report(vol,"Proibido")).hasMessageContaining("restrito");
         var r=actions.report(admin,"Mensal"); actions.deleteReport(admin,r.id()); assertThat(store.all(Report.class)).isEmpty();

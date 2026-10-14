@@ -2,7 +2,7 @@
 
 Referência: enunciado **Trabalho em grupo.pdf**, disponibilizado pelo solicitante. O PDF foi lido como especificação acadêmica. As decisões de publicar no GitHub público e realizar individualmente vieram diretamente do usuário. O documento não foi incluído no repositório porque não é artefato autoral do projeto.
 
-**Revisão de 14/10/2026:** consulte a [auditoria contra o PDF original](AUDITORIA_DE_REQUISITOS.md). Os 59 testes passaram novamente, mas há pendências de equipe/entrega das interações com IA e um defeito confirmado na soma de unidades diferentes dos relatórios. “Implementado” não significa conformidade integral nem aprovação docente.
+**Revisão de 14/10/2026:** consulte a [auditoria contra o PDF original](AUDITORIA_DE_REQUISITOS.md). O defeito identificado na soma de unidades diferentes foi corrigido nos novos relatórios e nos indicadores, com testes de regressão. Permanecem as pendências de equipe/entrega das interações com IA. “Implementado” não significa conformidade integral nem aprovação docente.
 
 ## Critérios do enunciado
 
@@ -48,7 +48,7 @@ Referência: enunciado **Trabalho em grupo.pdf**, disponibilizado pelo solicitan
 | RF14 | Registrar entrega com baixa atômica | `deliver`, Cucumber, concorrência e E2E |
 | RF15 | Estornar uma entrega uma única vez | `reverse`, Cucumber e E2E |
 | RF16 | Notificar alterações e registrar leitura | `Events`, `NotificationObserver`, E2E e propriedade |
-| RF17 | Salvar/baixar/excluir relatório | `Reports.AccessProxy`, `report/deleteReport`, integração e E2E; ressalva: consolidação mistura unidades diferentes, conforme auditoria |
+| RF17 | Salvar/baixar/excluir relatório | `Reports.AccessProxy`, `report/deleteReport`, integração e E2E; totais separados por unidade, estornos excluídos e snapshots preservados |
 | RF18 | Registrar/editar feedback após presença | `feedback`, Cucumber e integração |
 | RF19 | Calcular selos a partir das horas | `VolunteerBadge`, testes de composição |
 | RF20 | Editar nome do próprio perfil | `updateProfile`, API `/profile` |

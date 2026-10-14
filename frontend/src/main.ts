@@ -28,8 +28,18 @@ export class App implements OnInit {
   get nav() { return ['Visão geral','Campanhas','Estoque','Voluntariado','Entregas',...(this.admin?['Pessoas','Relatórios']:[]),'Notificações','Meu perfil']; }
   get published() { return this.state?.campaigns.filter(c=>c.status==='PUBLICADA')??[]; }
   get unread() { return this.state?.notifications.filter(n=>!n.seen).length??0; }
-  get totalStock() { return this.state?.items.reduce((n,i)=>n+i.balance,0)??0; }
-  get totalDelivered() { return this.state?.deliveries.filter(d=>d.status==='ENTREGUE').reduce((n,d)=>n+d.quantity,0)??0; }
+  private totalsByUnit(quantity:(item:Item)=>number) {
+    const totals=new Map<string,number>();
+    for(const item of this.state?.items??[]) totals.set(item.unit,(totals.get(item.unit)??0)+quantity(item));
+    return [...totals].sort(([a],[b])=>a<b?-1:a>b?1:0).map(([unit,quantity])=>({unit,quantity}));
+  }
+  get totalStock() { return this.totalsByUnit(item=>item.balance); }
+  get totalDelivered() {
+    const byItem=new Map<number,number>();
+    for(const delivery of this.state?.deliveries??[]) if(delivery.status==='ENTREGUE')
+      byItem.set(delivery.itemId,(byItem.get(delivery.itemId)??0)+delivery.quantity);
+    return this.totalsByUnit(item=>byItem.get(item.id)??0);
+  }
   get campaigns() { return this.state?.campaigns.filter(c=>c.name.toLowerCase().includes(this.search.toLowerCase()))??[]; }
   async token() { const r=await fetch('/api/csrf'); const data=await r.json(); this.csrf=data.token; }
   async request(path:string,method='GET',body?:unknown) {

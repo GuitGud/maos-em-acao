@@ -31,6 +31,7 @@ Este registro é um resumo de trabalho, **não uma exportação literal de toda 
 | Documentação | Requisitos, mapa de histórias, DDD, arquitetura, contrato, protótipos e comandos |
 | Publicação | Preparação de repositório público autorizado pelo usuário, sem publicar credenciais locais |
 | Apresentação | Preparação de slides com mapa editável, capturas reais da aplicação, notas de fala, roteiro de aproximadamente 10 minutos e PDF de reserva |
+| Correção após auditoria | A pedido do responsável, separação dos totais de relatório e indicadores por unidade, com testes de estorno, snapshot, download e layout móvel |
 
 As evidências de execução estão em [VALIDACAO.md](VALIDACAO.md) e nos relatórios produzidos pelos comandos documentados. A autoria de commits não implica que cada linha foi escrita manualmente pelo integrante; esta declaração acompanha o código.
 

@@ -121,6 +121,10 @@ O Compose sobe PostgreSQL 17 e o aplicativo em `http://localhost:8080`; os dados
 
 **Estoque compartilhado:** as movimentações registram a campanha de origem/destino, mas o saldo pertence ao item da ONG; não existe reserva exclusiva por campanha. A meta acompanha doações recebidas e não é reduzida por distribuições ou estornos. Quantidades são inteiras na unidade cadastrada; para frações, cadastre unidade menor (ex.: gramas).
 
+**Totais por unidade:** os novos relatórios e os indicadores de estoque/entregas agrupam somente itens com a mesma unidade cadastrada. Exemplo: `220 kg; 2 kit`. Unidades diferentes não são somadas nem convertidas automaticamente: `g`, `kg` e grafias diferentes permanecem separadas. Doações incluem apenas entradas de tipo `DOACAO`; ajustes afetam o saldo e entregas estornadas não entram no total entregue. Unidades cadastradas sem movimentação aparecem com zero.
+
+**Relatórios anteriores à correção de 14/10/2026:** são snapshots históricos e mantêm seu conteúdo, inclusive o total antigo. Gere um novo relatório para obter os totais atuais separados por unidade; isso não reconstrói retroativamente o saldo de uma data passada.
+
 **Prioridade:** `VULNERABILIDADE = vulnerabilidade × 100 + membros`; `TAMANHO_FAMILIA = membros × 100 + vulnerabilidade`. A pontuação fica registrada; a gestão decide a ordem de atendimento. Não há fila automática nem recomendação social baseada em dados reais.
 
 **Privacidade:** o voluntário vê somente seu perfil, inscrições, entregas próprias, avaliações próprias e notificações. Gestão vê dados operacionais. Rascunhos e relatórios administrativos não são retornados ao voluntário. Famílias são identificadas por código livre; não há cadastro de beneficiários com dados pessoais.
@@ -195,7 +199,7 @@ Para abrir o relatório:
 pnpm exec playwright show-report
 ```
 
-Os cinco testes E2E cobrem campanha/meta/publicação/doação/entrega/estorno; cadastro/aprovação/inscrição/aviso/cancelamento; relatório persistente; responsividade móvel; escape de conteúdo HTML. Asserções e ações passam pela interface Angular e API real. Eles não substituem os cenários Cucumber.
+Os seis testes E2E cobrem campanha/meta/publicação/doação/entrega/estorno; cadastro/aprovação/inscrição/aviso/cancelamento; relatório persistente; responsividade móvel; escape de conteúdo HTML; e totais por unidade no relatório, download TXT e painel, incluindo estorno e preservação do snapshot. Asserções e ações passam pela interface Angular e API real. Eles não substituem os cenários Cucumber.
 
 ## 5. Roteiro para demonstrar ao professor
 
@@ -212,7 +216,7 @@ Os cinco testes E2E cobrem campanha/meta/publicação/doação/entrega/estorno; 
 
 ## 6. Limites da entrega
 
-**Achado da auditoria de 14/10/2026:** os totais consolidados de doações, estoque e entregas somam quantidades de unidades diferentes. Por exemplo, 220 kg e 2 kits aparecem como 222 unidades no relatório. Consulte os saldos por item; o total consolidado precisa ser corrigido antes de ser interpretado como quantidade física. A reprodução e as pendências acadêmicas estão em [AUDITORIA_DE_REQUISITOS.md](docs/AUDITORIA_DE_REQUISITOS.md).
+**Correção da auditoria de 14/10/2026:** os totais passaram a ser separados por unidade. O registro do defeito original e de sua resolução está em [AUDITORIA_DE_REQUISITOS.md](docs/AUDITORIA_DE_REQUISITOS.md).
 
 Não inclui multi-ONG, recuperação de senha, mensagens externas, anexos, pagamento, entregas parciais de uma mesma requisição, geolocalização ou fila automática de prioridade. A caixa de notificações atualiza ao carregar a página ou concluir uma ação; não há push. O endpoint de estado carrega coleções completas e foi projetado para volume acadêmico; bases grandes exigem paginação. A interface inclui labels, estados de erro, foco visível e layout móvel; não é uma certificação formal de acessibilidade.
 

@@ -1,5 +1,13 @@
 # Evidências de validação
 
+## Correção dos totais por unidade — 14/10/2026
+
+Após corrigir os relatórios e os indicadores, a compilação Angular passou e a suíte executou **56 testes Java/Cucumber + 6 testes Playwright/Chrome = 62 testes aprovados**, sem falhas. `ApplicationTest` passou de 21 para 24 testes; os demais grupos Java permanecem com as contagens anteriores. O JAR foi empacotado após a suíte e iniciado em `127.0.0.1:18088`, usando outro banco H2 novo em memória.
+
+As três novas regressões Java verificam unidades diferentes, agrupamento de itens da mesma unidade, ajustes, exclusão de estornos, preservação do snapshot, zero/ausência de itens e totais acima de `Integer.MAX_VALUE`. O sexto E2E confere os indicadores, o relatório e seu download TXT, a persistência após nova doação e o layout móvel com várias unidades. As capturas do relatório e do painel móvel foram inspecionadas.
+
+Os novos totais mantêm a unidade cadastrada e não fazem conversões automáticas. Relatórios já salvos continuam como snapshots; é necessário gerar um novo para obter o saldo atual com a correção. O CML não foi alterado e sua execução aprovada nesta data está registrada na auditoria inicial abaixo. Os resultados históricos seguintes correspondem às versões anteriores à correção.
+
 ## Revalidação em 14/10/2026
 
 Build Angular, 53 testes Java/Cucumber, 1 validação CML e 5 testes Playwright/Chrome passaram novamente: **59 verificações aprovadas**. JAR iniciado com banco H2 novo em memória para o navegador. PostgreSQL e Docker Compose não foram reexecutados nesta data.
