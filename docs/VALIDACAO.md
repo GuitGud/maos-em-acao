@@ -6,7 +6,9 @@ Após corrigir os relatórios e os indicadores, a compilação Angular passou e 
 
 As três novas regressões Java verificam unidades diferentes, agrupamento de itens da mesma unidade, ajustes, exclusão de estornos, preservação do snapshot, zero/ausência de itens e totais acima de `Integer.MAX_VALUE`. O sexto E2E confere os indicadores, o relatório e seu download TXT, a persistência após nova doação e o layout móvel com várias unidades. As capturas do relatório e do painel móvel foram inspecionadas.
 
-Os novos totais mantêm a unidade cadastrada e não fazem conversões automáticas. Relatórios já salvos continuam como snapshots; é necessário gerar um novo para obter o saldo atual com a correção. O CML não foi alterado e sua execução aprovada nesta data está registrada na auditoria inicial abaixo. Os resultados históricos seguintes correspondem às versões anteriores à correção.
+O [workflow 38568430734](https://github.com/GuitGud/maos-em-acao/actions/runs/38568430734), no commit `8018c4b`, também terminou com **sucesso nos dois jobs**. Na CI passaram Angular, 56 testes Java/Cucumber, 1 validador CML e 6 testes Chromium (**63 verificações**). O job PostgreSQL 17 repetiu com sucesso os 24 testes de aplicação e 19 cenários Cucumber; essas 43 execuções não representam casos adicionais.
+
+Os novos totais mantêm a unidade cadastrada e não fazem conversões automáticas. Relatórios já salvos continuam como snapshots; é necessário gerar um novo para obter o saldo atual com a correção. Os resultados históricos seguintes correspondem às versões anteriores à correção.
 
 ## Revalidação em 14/10/2026
 
