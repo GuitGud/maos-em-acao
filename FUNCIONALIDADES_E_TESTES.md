@@ -212,6 +212,8 @@ Os cinco testes E2E cobrem campanha/meta/publicação/doação/entrega/estorno; 
 
 ## 6. Limites da entrega
 
+**Achado da auditoria de 14/10/2026:** os totais consolidados de doações, estoque e entregas somam quantidades de unidades diferentes. Por exemplo, 220 kg e 2 kits aparecem como 222 unidades no relatório. Consulte os saldos por item; o total consolidado precisa ser corrigido antes de ser interpretado como quantidade física. A reprodução e as pendências acadêmicas estão em [AUDITORIA_DE_REQUISITOS.md](docs/AUDITORIA_DE_REQUISITOS.md).
+
 Não inclui multi-ONG, recuperação de senha, mensagens externas, anexos, pagamento, entregas parciais de uma mesma requisição, geolocalização ou fila automática de prioridade. A caixa de notificações atualiza ao carregar a página ou concluir uma ação; não há push. O endpoint de estado carrega coleções completas e foi projetado para volume acadêmico; bases grandes exigem paginação. A interface inclui labels, estados de erro, foco visível e layout móvel; não é uma certificação formal de acessibilidade.
 
 Para uma implantação pública real, configure HTTPS, cookies seguros (`SERVER_SERVLET_SESSION_COOKIE_SECURE=true`), política de backups e operação, e avalie os requisitos reais da ONG. As senhas de demonstração existem exclusivamente para avaliação local.

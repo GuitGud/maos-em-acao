@@ -6,7 +6,7 @@ Responsável informado pela conta: Guilherme Alcoforado Rabelo (`GuitGud`). O us
 
 ## Interações fornecidas pelo usuário nesta tarefa
 
-O pedido original está transcrito em [interacoes/pedido-original.md](interacoes/pedido-original.md). As mensagens públicas relevantes estão em [interacoes/registro-da-tarefa.md](interacoes/registro-da-tarefa.md). Respostas posteriores:
+O pedido original está transcrito em [interacoes/pedido-original.md](interacoes/pedido-original.md). O arquivo local `docs/interacoes/registro-da-tarefa.md` foi retirado do versionamento a pedido do responsável e está no `.gitignore`; ele não integra a versão atual publicada. Respostas posteriores:
 
 1. À pergunta sobre visibilidade/nome: **“Público, com nome maos-em-acao”**.
 2. À pergunta sobre tamanho do grupo: **“1 integrante”**.
@@ -36,6 +36,6 @@ As evidências de execução estão em [VALIDACAO.md](VALIDACAO.md) e nos relat�
 
 ## Entrega das interações ao professor
 
-O enunciado solicita as interações com IAs quando há uso. Este repositório preserva o pedido, respostas relevantes e o resumo. Para entregar **a conversa integral**, o responsável deve exportar ou compartilhar esta tarefa do Codex e anexar o registro à submissão. Não foi inventada uma transcrição literal de mensagens intermediárias ou de raciocínio interno. A exportação integral é uma pendência documental do responsável se o professor a exigir nesse formato.
+O enunciado solicita **entregar as interações com IAs** quando há uso. Este repositório preserva o pedido, respostas relevantes e um resumo, mas esses arquivos não equivalem ao registro completo das interações. A entrega desse registro ao professor permanece pendente e deve ser feita por meio aceito por ele. O responsável pode exportar ou compartilhar a conversa e anexá-la à submissão. Não foi inventada uma transcrição literal de mensagens intermediárias ou de raciocínio interno.
 
 O integrante deve revisar os artefatos, compreender as regras e padrões, conseguir demonstrar os testes e declarar a assistência recebida na apresentação. Não foram fabricadas entrevistas com usuários, aprovação docente ou contribuições de outros integrantes.

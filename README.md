@@ -10,6 +10,7 @@ Plataforma web para organizar campanhas solidárias, doações, turnos de volunt
 
 - **[Funcionalidades e comandos de execução/testes](FUNCIONALIDADES_E_TESTES.md)** — guia solicitado, com passo a passo para Windows e Linux.
 - [Requisitos e rastreabilidade](docs/REQUISITOS.md).
+- [Auditoria dos requisitos e pendências da entrega](docs/AUDITORIA_DE_REQUISITOS.md).
 - [Domínio, linguagem ubíqua e DDD](docs/DOMINIO_E_DDD.md).
 - [Mapa de histórias de usuário](docs/MAPA_DE_HISTORIAS.md).
 - [Apresentação de 10 minutos: mapa, protótipos e roteiro de fala](docs/apresentacao/README.md).

@@ -1,5 +1,13 @@
 # Evidências de validação
 
+## Revalidação em 14/10/2026
+
+Build Angular, 53 testes Java/Cucumber, 1 validação CML e 5 testes Playwright/Chrome passaram novamente: **59 verificações aprovadas**. JAR iniciado com banco H2 novo em memória para o navegador. PostgreSQL e Docker Compose não foram reexecutados nesta data.
+
+Um caso exploratório adicional encontrou um defeito fora da cobertura atual: 220 kg e 2 kits são consolidados no relatório como 222 unidades. Portanto, a aprovação da suíte não representa aprovação integral dos requisitos. Veja a [auditoria detalhada](AUDITORIA_DE_REQUISITOS.md), com comparação ao PDF original, reprodução e pendências acadêmicas.
+
+## Registro histórico de 16/09/2026
+
 Validação local realizada em **16/09/2026**, em Windows, JDK 25, Maven 3.9.11, Node.js 24.19.0, pnpm 11.19.0 e Google Chrome. O código Java tem target 21. Dados de testes são fictícios e isolados dos dados persistentes padrão.
 
 ## Resultados executados
