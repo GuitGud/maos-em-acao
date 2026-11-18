@@ -2,7 +2,7 @@
 
 **Houve uso de IA.** Durante o desenvolvimento do projeto em grupo **"Mãos em Ação"** (plataforma de gestão de campanhas solidárias e voluntários), um assistente de inteligência artificial foi utilizado como apoio estrutural inicial e, principalmente, como **revisor técnico e validador** das entregas realizadas ao longo do ciclo de desenvolvimento.
 
-A transcrição completa da conversa está registrada neste repositório em [log-de-interacao.md]([log-de-interacao.md](https://github.com/GuitGud/maos-em-acao/blob/main/docs/interacoes/log-de-interacao.md)).
+A transcrição completa da conversa está registrada neste repositório em [log-de-interacao.md]([log-de-interacao.md](https://github.com/GuitGud/maos-em-acao/blob/main/docs/interacoes/log-de-interacao.md)]).
 
 ---
 
