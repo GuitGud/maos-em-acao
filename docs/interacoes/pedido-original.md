@@ -36,4 +36,4 @@ Transcrição do conteúdo textual do pedido. O arquivo de referência fornecido
 >
 > Nome possível: **Mãos em Ação**.
 >
-> Prepare o esqueleto desse projeto, mas deixe para eu fazer as funcionalidades e os testes unitários sozinho, quero só ajuda na validação...
+> Prepare o esqueleto desse projeto, mas deixe para eu fazer as funcionalidades e os testes unitários sozinho, quero só ajuda na validação e Documentação.
